@@ -60,7 +60,13 @@ const AdminDashboard = () => {
       field: "image",
       headerName: "Image",
       width: 150,
-      renderCell: (params) => <img width="40%" src={params.row.image.url} />,
+      renderCell: (params) => (
+        <img
+          width="40%"
+          src={params.row.image.url}
+          alt={params.row.image.alt}
+        />
+      ),
     },
     {
       field: "likes",

@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { modules } from "../components/moduleToolbar";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 const validationSchema = yup.object({
@@ -24,11 +24,6 @@ const validationSchema = yup.object({
 
 const EditPost = () => {
   const { id } = useParams();
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [image, setImage] = useState("");
-  const [imagePreview, setImagePreview] = useState("");
-
   const navigate = useNavigate();
 
   const {
@@ -41,8 +36,8 @@ const EditPost = () => {
     setFieldValue,
   } = useFormik({
     initialValues: {
-      title,
-      content,
+      title: "",
+      content: "",
       image: "",
     },
 
@@ -50,21 +45,17 @@ const EditPost = () => {
     enableReinitialize: true,
     onSubmit: (values, actions) => {
       updatePost(values);
-      //alert(JSON.stringify(values, null, 2));
       actions.resetForm();
     },
   });
 
   //show post by Id
   const singlePostById = async () => {
-    // console.log(id)
     try {
       const { data } = await axios.get(`/api/post/${id}`);
-      console.log(data);
-      setTitle(data.posts.title);
-      setContent(data.posts.content);
-      setImagePreview(data.posts.image.url);
-      console.log("single post admin", data.posts);
+      setFieldValue("title", data.posts.title);
+      setFieldValue("content", data.posts.content);
+      setFieldValue("image", data.posts.image.url);
     } catch (error) {
       console.log(error);
       toast.error(error);
@@ -189,9 +180,7 @@ const EditPost = () => {
                         <Box>
                           <img
                             style={{ maxWidth: "100px" }}
-                            src={
-                              values.image === "" ? imagePreview : values.image
-                            }
+                            src={values.image}
                             alt=""
                           />
                         </Box>
@@ -208,7 +197,6 @@ const EditPost = () => {
             variant="contained"
             elevation={0}
             sx={{ mt: 3, p: 1, mb: 2, borderRadius: "25px" }}
-            // disabled={loading}
           >
             Update post
           </Button>

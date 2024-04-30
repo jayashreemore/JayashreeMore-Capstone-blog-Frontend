@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -12,15 +13,17 @@ import { modules } from "../components/moduleToolbar";
 const validationSchema = yup.object({
   title: yup
     .string("Add a post title")
-    .min(4, "text content should havea minimum of 4 characters ")
+    .min(4, "Post title should have a minimum of 4 characters")
     .required("Post title is required"),
   content: yup
     .string("Add text content")
-    .min(10, "text content should havea minimum of 10 characters ")
-    .required("text content is required"),
+    .min(10, "Text content should have a minimum of 10 characters")
+    .required("Text content is required"),
 });
 
 const CreatePost = () => {
+  const [imagePreview, setImagePreview] = useState(null);
+
   const {
     values,
     errors,
@@ -39,7 +42,6 @@ const CreatePost = () => {
     validationSchema: validationSchema,
     onSubmit: (values, actions) => {
       createNewPost(values);
-      //alert(JSON.stringify(values, null, 2));
       actions.resetForm();
     },
   });
@@ -51,10 +53,10 @@ const CreatePost = () => {
           api_secret: "Srfjo0LEWz_F6QvykXnIfhptS9w",
         },
       });
-      toast.success("post created");
+      toast.success("Post created successfully");
     } catch (error) {
-      console.log(error);
-      toast.error(error);
+      console.error(error);
+      toast.error("Failed to create post");
     }
   };
 
@@ -62,8 +64,7 @@ const CreatePost = () => {
     <>
       <Box sx={{ bgcolor: "white", padding: "20px 200px" }}>
         <Typography variant="h5" sx={{ pb: 4 }}>
-          {" "}
-          Create post{" "}
+          Create post
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <TextField
@@ -89,30 +90,28 @@ const CreatePost = () => {
               placeholder={"Write the post content..."}
               modules={modules}
               value={values.content}
-              onChange={(e) => setFieldValue("content", e)}
+              onChange={(content) => setFieldValue("content", content)}
             />
-            <Box
-              component="span"
-              sx={{ color: "#d32f2f", fontSize: "12px", pl: 2 }}
-            >
-              {touched.content && errors.content}
-            </Box>
+            {touched.content && errors.content && (
+              <Box sx={{ color: "#d32f2f", fontSize: "12px", pl: 2 }}>
+                {errors.content}
+              </Box>
+            )}
           </Box>
 
           <Box border="2px dashed blue" sx={{ p: 1 }}>
             <Dropzone
               acceptedFiles=".jpg,.jpeg,.png"
               multiple={false}
-              //maxFiles={3}
-              onDrop={(acceptedFiles) =>
-                acceptedFiles.map((file, index) => {
-                  const reader = new FileReader();
-                  reader.readAsDataURL(file);
-                  reader.onloadend = () => {
-                    setFieldValue("image", reader.result);
-                  };
-                })
-              }
+              onDrop={(acceptedFiles) => {
+                const file = acceptedFiles[0];
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onloadend = () => {
+                  setImagePreview(reader.result);
+                  setFieldValue("image", reader.result);
+                };
+              }}
             >
               {({ getRootProps, getInputProps, isDragActive }) => (
                 <Box
@@ -126,44 +125,23 @@ const CreatePost = () => {
                   <input name="banner" {...getInputProps()} />
                   {isDragActive ? (
                     <>
-                      <p style={{ textAlign: "center" }}>
-                        <CloudUploadIcon
-                          sx={{ color: "primary.main", mr: 2 }}
-                        />
-                      </p>
-                      <p style={{ textAlign: "center", fontSize: "12px" }}>
-                        {" "}
+                      <CloudUploadIcon sx={{ color: "primary.main", mr: 2 }} />
+                      <Typography variant="body2" align="center">
                         Drop here!
-                      </p>
+                      </Typography>
                     </>
-                  ) : values.image === null ? (
-                    <>
-                      <p style={{ textAlign: "center" }}>
-                        <CloudUploadIcon
-                          sx={{ color: "primary.main", mr: 2 }}
-                        />
-                      </p>
-                      <p style={{ textAlign: "center", fontSize: "12px" }}>
-                        Drag and Drop here or click to choose
-                      </p>
-                    </>
+                  ) : imagePreview ? (
+                    <img
+                      style={{ maxWidth: "100px" }}
+                      src={imagePreview}
+                      alt="Uploaded preview"
+                    />
                   ) : (
                     <>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-around",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Box>
-                          <img
-                            style={{ maxWidth: "100px" }}
-                            src={values.image}
-                            alt=""
-                          />
-                        </Box>
-                      </Box>
+                      <CloudUploadIcon sx={{ color: "primary.main", mr: 2 }} />
+                      <Typography variant="body2" align="center">
+                        Drag and Drop here or click to choose
+                      </Typography>
                     </>
                   )}
                 </Box>
@@ -176,7 +154,6 @@ const CreatePost = () => {
             variant="contained"
             elevation={0}
             sx={{ mt: 3, p: 1, mb: 2, borderRadius: "25px" }}
-            // disabled={loading}
           >
             Create post
           </Button>
