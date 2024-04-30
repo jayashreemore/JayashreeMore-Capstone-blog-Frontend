@@ -64,6 +64,7 @@ const EditPost = () => {
 
   useEffect(() => {
     singlePostById();
+    // eslint-disable-next-line
   }, []);
 
   const updatePost = async (values) => {
@@ -110,7 +111,10 @@ const EditPost = () => {
               placeholder={"Write the post content..."}
               modules={modules}
               value={values.content}
-              onChange={(e) => setFieldValue("content", e)}
+              onChange={(e) => {
+                setFieldValue("content", e);
+                return e;
+              }}
             />
             <Box
               component="span"
@@ -126,6 +130,7 @@ const EditPost = () => {
               multiple={false}
               //maxFiles={3}
               onDrop={(acceptedFiles) =>
+                // eslint-disable-next-line
                 acceptedFiles.map((file, index) => {
                   const reader = new FileReader();
                   reader.readAsDataURL(file);

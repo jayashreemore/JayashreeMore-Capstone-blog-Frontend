@@ -48,7 +48,7 @@ const CreatePost = () => {
 
   const createNewPost = async (values) => {
     try {
-      const { data } = await axios.post("/api/post/create", values, {
+      await axios.post("/api/post/create", values, {
         headers: {
           api_secret: "Srfjo0LEWz_F6QvykXnIfhptS9w",
         },
