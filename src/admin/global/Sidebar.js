@@ -3,7 +3,7 @@ import { Sidebar, Menu, MenuItem, menuClasses } from "react-pro-sidebar";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import { Box } from "@mui/material";
 import PostAddIcon from "@mui/icons-material/PostAdd";
-import Person3Icon from "@mui/icons-material/Person3";
+//import Person3Icon from "@mui/icons-material/Person3";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {

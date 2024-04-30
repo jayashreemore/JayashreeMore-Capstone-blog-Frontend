@@ -1,13 +1,13 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import Dropzone from "react-dropzone";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+//import Dropzone from "react-dropzone";
+//import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import axios from "axios";
 import { toast } from "react-toastify";
-import ReactQuill from "react-quill";
+//import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { modules } from "../components/moduleToolbar";
+//import { modules } from "../components/moduleToolbar";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 //import { updateUser } from "../../../backend/controllers/authController";
@@ -47,7 +47,7 @@ const EditUser = () => {
     handleBlur,
     handleChange,
     handleSubmit,
-    setFieldValue,
+    // setFieldValue,
   } = useFormik({
     initialValues: {
       name,
@@ -84,6 +84,7 @@ const EditUser = () => {
 
   useEffect(() => {
     singleUserById();
+    // eslint-disable-next-line
   }, []);
 
   const updateUser = async (values) => {

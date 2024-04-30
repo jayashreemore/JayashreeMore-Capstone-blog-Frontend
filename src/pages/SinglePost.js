@@ -5,7 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
-import IconButton from "@mui/material/IconButton";
+//import IconButton from "@mui/material/IconButton";
 import Divider from "@mui/material/Divider";
 import { Box, Button } from "@mui/material";
 import axios from "axios";
@@ -50,6 +50,7 @@ const SinglePost = () => {
 
   useEffect(() => {
     displaySinglePost();
+    // eslint-disable-next-line
   }, []);
 
   // add comment
